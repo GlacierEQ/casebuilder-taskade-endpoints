@@ -1,0 +1,663 @@
+openapi: 3.1.0
+info:
+  title: Taskade API - VERIFIED
+  description: Official Taskade API endpoints verified from docs.taskade.com
+  version: 2.0.0
+servers:
+  - url: https://www.taskade.com/api/v1
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+security:
+  - BearerAuth: []
+paths:
+  /workspaces:
+    get:
+      operationId: getWorkspaces
+      summary: Get all workspaces
+      responses:
+        '200':
+          description: List of workspaces
+  /workspaces/{workspaceId}/folders:
+    get:
+      operationId: getWorkspaceFolders
+      summary: Get folders in workspace
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of folders
+  /workspaces/{workspaceId}/projects:
+    post:
+      operationId: createWorkspaceProject
+      summary: Create project in workspace
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '201':
+          description: Project created
+  /folders/{folderId}/projects:
+    get:
+      operationId: getFolderProjects
+      summary: Get projects in folder
+      parameters:
+        - name: folderId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of projects
+  /folders/{folderId}/agents:
+    get:
+      operationId: getFolderAgents
+      summary: Get agents in folder
+      parameters:
+        - name: folderId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of agents
+    post:
+      operationId: createAgent
+      summary: Create AI agent
+      parameters:
+        - name: folderId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '201':
+          description: Agent created
+  /folders/{folderId}/media:
+    get:
+      operationId: getFolderMedia
+      summary: Get media files in folder
+      parameters:
+        - name: folderId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of media files
+  /projects:
+    get:
+      operationId: getMyProjects
+      summary: Get user projects
+      responses:
+        '200':
+          description: List of user projects
+    post:
+      operationId: createProject
+      summary: Create project
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '201':
+          description: Project created
+  /projects/{projectId}:
+    get:
+      operationId: getProject
+      summary: Get project details
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Project details
+  /projects/{projectId}/complete:
+    post:
+      operationId: completeProject
+      summary: Mark project complete
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Project completed
+  /projects/{projectId}/restore:
+    post:
+      operationId: restoreProject
+      summary: Restore project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Project restored
+  /projects/{projectId}/copy:
+    post:
+      operationId: copyProject
+      summary: Copy project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Project copied
+  /projects/{projectId}/members:
+    get:
+      operationId: getProjectMembers
+      summary: Get project members
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of members
+  /projects/{projectId}/fields:
+    get:
+      operationId: getProjectFields
+      summary: Get project fields
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of fields
+  /projects/{projectId}/share:
+    get:
+      operationId: getProjectShareLink
+      summary: Get share link
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Share link
+    post:
+      operationId: enableShareLink
+      summary: Enable share link
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Share link enabled
+  /projects/{projectId}/blocks:
+    get:
+      operationId: getProjectBlocks
+      summary: Get project blocks
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of blocks
+  /projects/{projectId}/tasks:
+    get:
+      operationId: getProjectTasks
+      summary: Get project tasks
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of tasks
+    post:
+      operationId: createTasks
+      summary: Create tasks
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+      responses:
+        '201':
+          description: Tasks created
+  /projects/{projectId}/tasks/{taskId}:
+    get:
+      operationId: getTask
+      summary: Get task
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Task details
+    put:
+      operationId: updateTask
+      summary: Update task
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+      responses:
+        '200':
+          description: Task updated
+    delete:
+      operationId: deleteTask
+      summary: Delete task
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Task deleted
+  /projects/{projectId}/tasks/{taskId}/complete:
+    post:
+      operationId: completeTask
+      summary: Complete task
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Task completed
+  /projects/{projectId}/tasks/{taskId}/incomplete:
+    post:
+      operationId: markTaskIncomplete
+      summary: Mark task incomplete
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Task marked incomplete
+  /projects/{projectId}/tasks/{taskId}/assignees:
+    get:
+      operationId: getTaskAssignees
+      summary: Get task assignees
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of assignees
+    put:
+      operationId: updateTaskAssignees
+      summary: Update assignees
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                assignees:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Assignees updated
+  /projects/{projectId}/tasks/{taskId}/date:
+    get:
+      operationId: getTaskDate
+      summary: Get task date
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Task date
+    put:
+      operationId: setTaskDate
+      summary: Set task date
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                date:
+                  type: string
+                  format: date-time
+      responses:
+        '200':
+          description: Date set
+    delete:
+      operationId: deleteTaskDate
+      summary: Delete task date
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Date deleted
+  /projects/{projectId}/tasks/{taskId}/note:
+    get:
+      operationId: getTaskNote
+      summary: Get task note
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Task note
+    put:
+      operationId: updateTaskNote
+      summary: Update task note
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                note:
+                  type: string
+      responses:
+        '200':
+          description: Note updated
+    delete:
+      operationId: deleteTaskNote
+      summary: Delete task note
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Note deleted
+  /agents/{agentId}:
+    get:
+      operationId: getAgent
+      summary: Get agent
+      parameters:
+        - name: agentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Agent details
+    put:
+      operationId: updateAgent
+      summary: Update agent
+      parameters:
+        - name: agentId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '200':
+          description: Agent updated
+    delete:
+      operationId: deleteAgent
+      summary: Delete agent
+      parameters:
+        - name: agentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Agent deleted
+  /agents/{agentId}/knowledge/projects:
+    post:
+      operationId: addProjectToAgentKnowledge
+      summary: Add project to agent knowledge
+      parameters:
+        - name: agentId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                projectId:
+                  type: string
+      responses:
+        '200':
+          description: Project added
+    delete:
+      operationId: removeProjectFromAgentKnowledge
+      summary: Remove project from agent knowledge
+      parameters:
+        - name: agentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Project removed
+  /agents/{agentId}/conversations:
+    get:
+      operationId: getAgentConversations
+      summary: Get agent conversations
+      parameters:
+        - name: agentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of conversations
+  /media/{mediaId}:
+    get:
+      operationId: getMedia
+      summary: Get media file
+      parameters:
+        - name: mediaId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Media file
+    delete:
+      operationId: deleteMedia
+      summary: Delete media file
+      parameters:
+        - name: mediaId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Media deleted
