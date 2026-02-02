@@ -1,0 +1,336 @@
+openapi: 3.1.0
+info:
+  title: Taskade Casebuilder - 1FDV-23-0001009
+  description: |
+    RICO Genesis Casebuilder endpoints for Case 1FDV-23-0001009.
+    Hawaii Family Court - Federal escalation automation.
+    
+    Features:
+    - Genesis project creation
+    - Agent swarm deployment
+    - Document upload/download
+    - Task automation
+    
+    Auth: Bearer token (Taskade API key)
+  version: 1.0.0
+  contact:
+    name: Casey Barton
+    email: GLACIER.EQUILIBRIUM@GMAIL.COM
+servers:
+  - url: https://www.taskade.com/api/v1
+    description: Taskade Production API
+paths:
+  /workspaces:
+    get:
+      operationId: readWorkspaces
+      summary: Get all workspaces
+      description: Lists all Taskade workspaces accessible with current credentials
+      responses:
+        '200':
+          description: Workspaces retrieved successfully
+        '401':
+          description: Unauthorized - check API key
+  /workspaces/{workspaceId}:
+    get:
+      operationId: readWorkspace
+      summary: Get workspace by ID
+      description: Retrieve specific workspace details
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Workspace ID (e.g., GMJRSLiTgX1hmC1v)
+      responses:
+        '200':
+          description: Workspace details
+        '404':
+          description: Workspace not found
+  /workspaces/{workspaceId}/projects:
+    get:
+      operationId: readProjects
+      summary: List projects in workspace
+      description: Get all projects within a specific workspace
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Projects list
+    post:
+      operationId: writeGenesisProject
+      summary: Create Genesis project
+      description: |
+        Create a new Taskade Genesis project with AI-powered capabilities.
+        Supports automated app generation from prompts.
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Casebuilder RICO Genesis"
+                description:
+                  type: string
+                  example: "Federal escalation automation for 1FDV-23-0001009"
+      responses:
+        '201':
+          description: Project created
+  /projects:
+    post:
+      operationId: writeProjectGlobal
+      summary: Create project globally
+      description: Create a project without specifying workspace
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '201':
+          description: Project created
+  /projects/{projectId}:
+    get:
+      operationId: readProject
+      summary: Get project details
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Project details
+    patch:
+      operationId: writeProject
+      summary: Update project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '200':
+          description: Project updated
+  /projects/{projectId}/tasks:
+    get:
+      operationId: readTasks
+      summary: List tasks in project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Tasks list
+    post:
+      operationId: writeTask
+      summary: Create task
+      description: Create a new task with content (supports Markdown)
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  example: "Generate HRS §1983 complaint motion"
+      responses:
+        '201':
+          description: Task created
+  /projects/{projectId}/tasks/{taskId}:
+    get:
+      operationId: readTask
+      summary: Get task details
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Task details
+    patch:
+      operationId: writeTaskUpdate
+      summary: Update task
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+      responses:
+        '200':
+          description: Task updated
+    delete:
+      operationId: deleteTask
+      summary: Delete task
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Task deleted
+  /projects/{projectId}/tasks/{taskId}/attachments:
+    get:
+      operationId: downloadDocHyper
+      summary: Download task attachment
+      description: Retrieve documents attached to tasks (dockets, evidence, filings)
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Attachment download
+    post:
+      operationId: uploadDocHyper
+      summary: Upload task attachment
+      description: |
+        Upload legal documents, evidence bundles, or dockets.
+        Supports ZIP, PDF, DOCX, images, audio files.
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: File uploaded successfully
+  /agents:
+    get:
+      operationId: readAgents
+      summary: List AI agents
+      description: Get all deployed Taskade AI agents
+      responses:
+        '200':
+          description: Agents list
+    post:
+      operationId: writeHyperAgent
+      summary: Create AI agent
+      description: |
+        Deploy a new AI agent with specialized capabilities.
+        Agents can perform research, document generation, and automation.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "RICO Research Agent"
+                role:
+                  type: string
+                  example: "Legal research specialist for federal litigation"
+      responses:
+        '201':
+          description: Agent created
+  /automations:
+    post:
+      operationId: writeAutomationHyper
+      summary: Create automation workflow
+      description: |
+        Build automated workflows connecting triggers and actions.
+        Supports multi-step document generation and case management.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "TRO Auto-Generation"
+                trigger:
+                  type: string
+                  example: "New evidence uploaded"
+      responses:
+        '201':
+          description: Automation created
